@@ -12,7 +12,6 @@ const Signup = () => {
   const handleSignup = async (data) => {
     try {
       const result = await axios.post("/auth/signup", data);
-      console.log(result);
       localStorage.setItem("token", result.data.token);
       navigate("/dashboard");
     } catch (error) {

@@ -4,7 +4,7 @@ import { Navbar, Todos } from "../../components";
 import { useForm } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
 import { useSelector, useDispatch } from "react-redux";
-import { setTodos } from "../../features/todoSlice";
+import { setTodos, addTodo } from "../../features/todoSlice";
 
 import axios from "axios";
 
@@ -17,11 +17,11 @@ function Dashboard() {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const addTodo = async (data) => {
+  const createTodo = async (data) => {
     data = { ...data, userId: user.id };
     try {
-      const result = await axios.post("/todos/add", data);
-      dispatch(setTodos(result?.data?.todos));
+      const result = await axios.post("/todos", data);
+      dispatch(addTodo(result?.data?.todo));
     } catch (error) {
       alert(error?.response?.data?.message);
       console.log(error);
@@ -32,7 +32,7 @@ function Dashboard() {
 
   const fetchTodos = async () => {
     try {
-      const result = await axios.get(`/todos/fetch/${user.id}`);
+      const result = await axios.get(`/todos/${user.id}`);
       dispatch(setTodos(result?.data?.todos));
     } catch (error) {
       alert(error?.response?.data?.message);
@@ -70,7 +70,7 @@ function Dashboard() {
         <div className="fixed inset-0 bg-base bg-opacity-50 flex justify-center items-center">
           <div className="bg-primary p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h3 className="text-lg font-semibold mb-4">Add a new Todo</h3>
-            <form onSubmit={handleSubmit(addTodo)}>
+            <form onSubmit={handleSubmit(createTodo)}>
               <div className="mb-4">
                 <label className="block text-primary-content mb-2">Title</label>
                 <input

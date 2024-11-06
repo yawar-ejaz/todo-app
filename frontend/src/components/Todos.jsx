@@ -13,6 +13,7 @@ const Todos = () => {
           id={todo._id}
           title={todo.title}
           description={todo.description}
+          date={todo.createdAt}
           isCompleted={todo.isCompleted}
         />
       ))}

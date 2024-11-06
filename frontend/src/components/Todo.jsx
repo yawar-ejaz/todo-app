@@ -1,13 +1,13 @@
 import React from "react";
 import axios from "axios";
-import { setTodos, deleteTodo } from "../features/todoSlice";
+import { setTodos, deleteTodo, toggleTodo } from "../features/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-const Todo = ({ id, title, description, isCompleted }) => {
+const Todo = ({ id, title, description, date, isCompleted }) => {
   const dispatch = useDispatch();
   const handleDelete = async (id) => {
     try {
-      axios.delete(`/todos/delete/${id}`);
+      axios.delete(`/todos/${id}`);
       dispatch(deleteTodo(id));
     } catch (error) {
       alert(error?.response?.data?.message);
@@ -15,12 +15,14 @@ const Todo = ({ id, title, description, isCompleted }) => {
     }
   };
 
-  const handleToggle = (id) => {
-    // setTodos(
-    //   todos.map((todo) =>
-    //     todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
-    //   )
-    // );
+  const handleToggle = async (id) => {
+    try {
+      await axios.patch(`/todos/${id}`);
+      dispatch(toggleTodo(id));
+    } catch (error) {
+      alert(error?.response?.data?.message);
+      console.log(error);
+    }
   };
   return (
     <div
@@ -49,6 +51,14 @@ const Todo = ({ id, title, description, isCompleted }) => {
             }`}
           >
             {description}
+          </p>
+          <p className="text-xs text-gray-400">
+            {new Date(date).toLocaleDateString("en-GB")}
+            {" - "}
+            {new Date(date).toLocaleTimeString("en-GB", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </p>
         </div>
       </div>

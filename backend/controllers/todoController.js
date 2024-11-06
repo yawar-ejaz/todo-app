@@ -18,14 +18,14 @@ const addTodo = async (req, res, next) => {
         message: "No such user exists.",
       });
     }
-    await Todos.create({
+    const todo = await Todos.create({
       title,
       description,
       userId,
     });
 
-    const todos = await Todos.find({ userId });
-    res.status(201).json({ todos });
+    // const todos = await Todos.find({ userId });
+    res.status(201).json({ todo });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -45,12 +45,32 @@ const fetchTodos = async (req, res, next) => {
       });
     }
 
-    const todos = await Todos.find({ userId });
+    const todos = await Todos.find({ userId }).sort({ createdAt: -1 });
     res.status(200).json({ todos });
   } catch (error) {
     console.log(error);
     res.status(500).json({
       message: "Failed fetch todos",
+    });
+  }
+};
+
+const toggleTodo = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const todo = await Todos.findOne({ _id: id });
+    if (!todo) {
+      return res.status(400).json({
+        message: "No such todo exists",
+      });
+    }
+    todo.isCompleted = !todo.isCompleted; // Toggle the isCompleted status
+    await todo.save();
+    res.status(200).json({ message: "Todo updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error updating todo.",
     });
   }
 };
@@ -78,4 +98,5 @@ module.exports = {
   addTodo,
   fetchTodos,
   deleteTodo,
+  toggleTodo,
 };

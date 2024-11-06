@@ -13,8 +13,6 @@ const Login = () => {
     try {
       const result = await axios.post("/auth/login", data);
       localStorage.setItem("token", result.data.token);
-      console.log(1, "login success");
-
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
