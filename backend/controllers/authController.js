@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Users = require("../models/users");
+const { encrypt, isMatching } = require("../utils/hashing");
+const createToken = require("../utils/createToken");
 
 const createUser = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -8,6 +10,7 @@ const createUser = async (req, res, next) => {
       message: "All fields are Mandatory!",
     });
   }
+
   try {
     const existingUser = await Users.findOne({ email });
 
@@ -18,17 +21,18 @@ const createUser = async (req, res, next) => {
     }
 
     const user = await Users.create({
-      name,
+      name: name
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
       email,
-      password,
+      password: await encrypt(password),
     });
 
-    // const token = createToken(user._id);
+    const token = createToken(user._id, user.name, user.email);
     res.status(201).json({
-      //   token,
-      id: user._id,
-      name: user.name,
-      email: user.email,
+      token,
     });
   } catch (error) {
     console.log(error);
@@ -53,13 +57,10 @@ const login = async (req, res, next) => {
         message: "No such user exists",
       });
     }
-    if (user.password === password) {
-      // const token = createToken(user._id);
+    if (await isMatching(password, user.password)) {
+      const token = createToken(user._id, user.name, user.email);
       res.status(200).json({
-        //   token,
-        id: user._id,
-        name: user.name,
-        email: user.email,
+        token,
       });
     } else {
       res.status(400).json({

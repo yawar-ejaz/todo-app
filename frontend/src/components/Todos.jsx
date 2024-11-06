@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Todo from "./Todo";
+import { useSelector, useDispatch } from "react-redux";
 
-const Todos = ({ todos, fetchTodos }) => {
+const Todos = () => {
+  const todos = useSelector((state) => state.todos);
+
   return (
     <div className="h-full">
       {todos.map((todo) => (
@@ -11,7 +14,6 @@ const Todos = ({ todos, fetchTodos }) => {
           title={todo.title}
           description={todo.description}
           isCompleted={todo.isCompleted}
-          fetchTodos={fetchTodos}
         />
       ))}
     </div>

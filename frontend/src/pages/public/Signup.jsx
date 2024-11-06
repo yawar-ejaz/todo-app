@@ -13,9 +13,8 @@ const Signup = () => {
     try {
       const result = await axios.post("/auth/signup", data);
       console.log(result);
-      localStorage.setItem("user", JSON.stringify(result.data));
-      //   console.log(jwtDecode(result.data.token));
-        navigate("/dashboard");
+      localStorage.setItem("token", result.data.token);
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);

@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Todos } from "../../components";
 import { useForm } from "react-hook-form";
+import { jwtDecode } from "jwt-decode";
+import { useSelector, useDispatch } from "react-redux";
+import { setTodos } from "../../features/todoSlice";
+
 import axios from "axios";
 
 function Dashboard() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = jwtDecode(localStorage.getItem("token"));
+  const dispatch = useDispatch();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [todos, setTodos] = useState([]);
   const { handleSubmit, register, reset } = useForm();
 
   const openModal = () => setIsModalOpen(true);
@@ -16,7 +21,7 @@ function Dashboard() {
     data = { ...data, userId: user.id };
     try {
       const result = await axios.post("/todos/add", data);
-      setTodos(result?.data?.todos);
+      dispatch(setTodos(result?.data?.todos));
     } catch (error) {
       alert(error?.response?.data?.message);
       console.log(error);
@@ -28,10 +33,7 @@ function Dashboard() {
   const fetchTodos = async () => {
     try {
       const result = await axios.get(`/todos/fetch/${user.id}`);
-      console.log("fetch called");
-
-      setTodos(result?.data?.todos);
-      console.log(result.data.todos);
+      dispatch(setTodos(result?.data?.todos));
     } catch (error) {
       alert(error?.response?.data?.message);
       console.log(error);
@@ -59,7 +61,7 @@ function Dashboard() {
           </button>
         </div>
         <div className="overflow-y-auto h-[calc(100vh-8rem)] p-4 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500">
-          <Todos todos={todos} fetchTodos={fetchTodos} />
+          <Todos />
         </div>
       </div>
 

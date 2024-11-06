@@ -36,7 +36,6 @@ const addTodo = async (req, res, next) => {
 
 const fetchTodos = async (req, res, next) => {
   const { userId } = req.params;
-  console.log("here", userId);
 
   try {
     const user = await Users.findOne({ _id: userId });
@@ -66,7 +65,7 @@ const deleteTodo = async (req, res, next) => {
       });
     }
     await Todos.deleteOne({ _id: id });
-    res.status(204);
+    res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({

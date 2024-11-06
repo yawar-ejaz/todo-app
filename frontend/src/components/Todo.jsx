@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
+import { setTodos, deleteTodo } from "../features/todoSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-const Todo = ({ id, title, description, isCompleted, fetchTodos }) => {
+const Todo = ({ id, title, description, isCompleted }) => {
+  const dispatch = useDispatch();
   const handleDelete = async (id) => {
     try {
-      const result = await axios.delete(`/todos/delete/${id}`);
-      fetchTodos();
-      //   setTodos(result.data.todos);
+      axios.delete(`/todos/delete/${id}`);
+      dispatch(deleteTodo(id));
     } catch (error) {
       alert(error?.response?.data?.message);
       console.log(error);

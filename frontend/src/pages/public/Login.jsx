@@ -12,10 +12,9 @@ const Login = () => {
   const handleLogin = async (data) => {
     try {
       const result = await axios.post("/auth/login", data);
-      console.log(result);
-      localStorage.setItem("user", JSON.stringify(result.data));
+      localStorage.setItem("token", result.data.token);
+      console.log(1, "login success");
 
-      //   console.log(jwtDecode(result.data.token));
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
