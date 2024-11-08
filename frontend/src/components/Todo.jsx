@@ -32,6 +32,7 @@ const Todo = ({ id, title, description, date, isCompleted }) => {
     >
       <div className="flex items-center space-x-4">
         <input
+          name="checkbox"
           type="checkbox"
           className="checkbox border-white"
           checked={isCompleted}

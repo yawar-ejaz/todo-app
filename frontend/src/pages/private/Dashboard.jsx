@@ -2,21 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Todos } from "../../components";
 import { useForm } from "react-hook-form";
-import { jwtDecode } from "jwt-decode";
+
 import { useSelector, useDispatch } from "react-redux";
 import { setTodos, addTodo } from "../../features/todoSlice";
-
+import { setUser } from "../../features/userSlice";
 import axios from "axios";
 
 function Dashboard() {
-  const user = jwtDecode(localStorage.getItem("token"));
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit, register, reset } = useForm();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
   const createTodo = async (data) => {
     data = { ...data, userId: user.id };
     try {

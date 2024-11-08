@@ -3,22 +3,27 @@ import { Root, Login, Signup, NotFound } from "./pages/public";
 import { Dashboard } from "./pages/private";
 import { PublicRoute, PrivateRoute } from "./utils";
 import axios from "axios";
-import { useState } from "react";
-import Counter from "./Counter";
-import Buttons from "./Buttons";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "./features/userSlice";
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_ADDRESS;
 
 function App() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+//   const token = localStorage.getItem("token");
+//   if (token) {
+//     dispatch(setUser(jwtDecode(token)));
+//   }
   return (
     <Router>
       <Routes>
-        <Route element={<PublicRoute user={false} />}>
+        <Route element={<PublicRoute user={user} />}>
           <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route element={<PrivateRoute user={true} />}>
+        <Route element={<PrivateRoute user={user} />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
