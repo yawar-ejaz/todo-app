@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Root, Login, Signup, NotFound } from "./pages/public";
-import { Dashboard } from "./pages/private";
+import { Dashboard, Profile } from "./pages/private";
 import { PublicRoute, PrivateRoute } from "./utils";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,6 +25,7 @@ function App() {
         </Route>
         <Route element={<PrivateRoute user={user} />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </Router>

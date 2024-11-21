@@ -58,7 +58,12 @@ const login = async (req, res, next) => {
       });
     }
     if (await isMatching(password, user.password)) {
-      const token = createToken(user._id, user.name, user.email);
+      const token = createToken(
+        user._id,
+        user.name,
+        user.email,
+        user.dateJoined
+      );
       res.status(200).json({
         token,
       });

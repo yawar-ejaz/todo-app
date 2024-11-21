@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const authRoute = require("./routes/authRoute");
+const userRoute = require("./routes/userRoute");
 const todoRoute = require("./routes/todoRoute");
 const connectDb = require("./utils/database");
 
@@ -18,6 +19,7 @@ app.use(
 connectDb();
 
 app.use("/auth", authRoute);
+app.use("/user", userRoute);
 app.use("/todos", todoRoute);
 
 const startServer = async () => {
