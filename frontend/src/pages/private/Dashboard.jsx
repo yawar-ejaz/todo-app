@@ -11,6 +11,7 @@ import axios from "axios";
 function Dashboard() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const token = localStorage.getItem("token");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { handleSubmit, register, reset } = useForm();
@@ -19,9 +20,13 @@ function Dashboard() {
   const closeModal = () => setIsModalOpen(false);
 
   const createTodo = async (data) => {
-    data = { ...data, userId: user.id };
+    data = { ...data, userId: user._id };
     try {
-      const result = await axios.post("/todos", data);
+      const result = await axios.post("/todos", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(addTodo(result?.data?.todo));
     } catch (error) {
       alert(error?.response?.data?.message);
@@ -33,7 +38,11 @@ function Dashboard() {
 
   const fetchTodos = async () => {
     try {
-      const result = await axios.get(`/todos/${user.id}`);
+      const result = await axios.get(`/todos/${user._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(setTodos(result?.data?.todos));
     } catch (error) {
       alert(error?.response?.data?.message);

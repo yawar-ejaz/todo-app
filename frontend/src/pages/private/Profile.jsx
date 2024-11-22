@@ -11,6 +11,7 @@ import axios from "axios";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
   const { handleSubmit, register, reset } = useForm();
   const user = useSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,10 +21,18 @@ const Profile = () => {
     reset();
     setIsModalOpen(false);
     try {
-      const result = await axios.patch(`/user`, {
-        name: data.name,
-        _id: user.id,
-      });
+      const result = await axios.patch(
+        `/user`,
+        {
+          name: data.name,
+          _id: user._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       localStorage.setItem("token", result?.data?.token);
       const updatedUser = jwtDecode(localStorage.getItem("token"));
       dispatch(setUser(updatedUser));

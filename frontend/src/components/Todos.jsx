@@ -10,7 +10,7 @@ const Todos = () => {
       {todos.map((todo) => (
         <Todo
           key={todo._id}
-          id={todo._id}
+          _id={todo._id}
           title={todo.title}
           description={todo.description}
           date={todo.createdAt}

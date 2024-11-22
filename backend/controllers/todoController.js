@@ -56,9 +56,9 @@ const fetchTodos = async (req, res, next) => {
 };
 
 const toggleTodo = async (req, res, next) => {
-  const { id } = req.params;
+  const { _id } = req.body;
   try {
-    const todo = await Todos.findOne({ _id: id });
+    const todo = await Todos.findOne({ _id });
     if (!todo) {
       return res.status(400).json({
         message: "No such todo exists",
@@ -76,15 +76,15 @@ const toggleTodo = async (req, res, next) => {
 };
 
 const deleteTodo = async (req, res, next) => {
-  const { id } = req.params;
+  const { _id } = req.params;
   try {
-    const todo = await Todos.findOne({ _id: id });
+    const todo = await Todos.findOne({ _id });
     if (!todo) {
       return res.status(400).json({
         message: "No such todo exists",
       });
     }
-    await Todos.deleteOne({ _id: id });
+    await Todos.deleteOne({ _id });
     res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
     console.log(error);

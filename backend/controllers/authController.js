@@ -48,6 +48,8 @@ const login = async (req, res, next) => {
       message: "All fields are Mandatory!",
     });
   }
+  console.log(email);
+
   try {
     const user = await Users.findOne({ email });
 

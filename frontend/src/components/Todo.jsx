@@ -3,22 +3,35 @@ import axios from "axios";
 import { setTodos, deleteTodo, toggleTodo } from "../features/todoSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-const Todo = ({ id, title, description, date, isCompleted }) => {
+const Todo = ({ _id, title, description, date, isCompleted }) => {
   const dispatch = useDispatch();
-  const handleDelete = async (id) => {
+  const token = localStorage.getItem("token");
+  const handleDelete = async (_id) => {
     try {
-      axios.delete(`/todos/${id}`);
-      dispatch(deleteTodo(id));
+      axios.delete(`/todos/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(deleteTodo(_id));
     } catch (error) {
       alert(error?.response?.data?.message);
       console.log(error);
     }
   };
 
-  const handleToggle = async (id) => {
+  const handleToggle = async (_id) => {
     try {
-      await axios.patch(`/todos/${id}`);
-      dispatch(toggleTodo(id));
+      await axios.patch(
+        `/todos`,
+        { _id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch(toggleTodo(_id));
     } catch (error) {
       alert(error?.response?.data?.message);
       console.log(error);
@@ -36,7 +49,7 @@ const Todo = ({ id, title, description, date, isCompleted }) => {
           type="checkbox"
           className="checkbox border-white"
           checked={isCompleted}
-          onChange={() => handleToggle(id)}
+          onChange={() => handleToggle(_id)}
         />
         <div>
           <h3
@@ -65,7 +78,7 @@ const Todo = ({ id, title, description, date, isCompleted }) => {
       </div>
       <button
         className="btn bg-white text-black rounded-sm"
-        onClick={() => handleDelete(id)}
+        onClick={() => handleDelete(_id)}
       >
         Delete
       </button>

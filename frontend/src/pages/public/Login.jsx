@@ -17,10 +17,10 @@ const Login = () => {
       const result = await axios.post("/auth/login", data);
       localStorage.setItem("token", result?.data?.token);
       const user = jwtDecode(localStorage.getItem("token"));
-      dispatch(setUser(user));
+        dispatch(setUser(user));
     } catch (error) {
       console.log(error);
-      alert(error.response.data.message);
+      alert(error?.response?.data?.message);
       reset();
     }
   };
