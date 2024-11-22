@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Users = require("../models/users");
 const { encrypt, isMatching } = require("../utils/hashing");
 const createToken = require("../utils/createToken");
@@ -30,7 +29,7 @@ const createUser = async (req, res, next) => {
       password: await encrypt(password),
     });
 
-    const token = createToken(user._id, user.name, user.email);
+    const token = createToken(user._id, user.name, user.email, user.dateJoined);
     res.status(201).json({
       token,
     });

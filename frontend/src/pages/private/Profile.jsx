@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { setUser } from "../../features/userSlice";
+import { jwtDecode } from "jwt-decode";
+
 import axios from "axios";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { handleSubmit, register, reset } = useForm();
   const user = useSelector((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,8 +19,17 @@ const Profile = () => {
   const editProfile = async (data) => {
     reset();
     setIsModalOpen(false);
-    console.log("name edited", data.name);
-    const result = await axios.patch(`/user/${user.id}`);
+    try {
+      const result = await axios.patch(`/user`, {
+        name: data.name,
+        _id: user.id,
+      });
+      localStorage.setItem("token", result?.data?.token);
+      const updatedUser = jwtDecode(localStorage.getItem("token"));
+      dispatch(setUser(updatedUser));
+    } catch (error) {
+      alert(error?.response?.data?.message);
+    }
   };
 
   return (
