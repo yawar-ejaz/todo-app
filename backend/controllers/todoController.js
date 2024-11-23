@@ -4,15 +4,16 @@ const Todos = require("../models/todos");
 const { request } = require("express");
 
 const addTodo = async (req, res, next) => {
-  const { title, description, userId } = req.body;
-  if (!title || !description || !userId) {
+  const { title, description } = req.body;
+  const { _id } = req.user;
+  if (!title || !description || !_id) {
     return res.status(400).json({
       message: "All fields are mandatory!",
     });
   }
 
   try {
-    const user = await Users.findOne({ _id: userId });
+    const user = await Users.findById(_id);
     if (!user) {
       return res.status(400).json({
         message: "No such user exists.",
@@ -21,7 +22,7 @@ const addTodo = async (req, res, next) => {
     const todo = await Todos.create({
       title,
       description,
-      userId,
+      userId: _id,
     });
 
     // const todos = await Todos.find({ userId });
@@ -35,17 +36,17 @@ const addTodo = async (req, res, next) => {
 };
 
 const fetchTodos = async (req, res, next) => {
-  const { userId } = req.params;
+  const { _id } = req.user;
 
   try {
-    const user = await Users.findOne({ _id: userId });
+    const user = await Users.findById(_id);
     if (!user) {
       return res.status(400).json({
         message: "No such user exists.",
       });
     }
 
-    const todos = await Todos.find({ userId }).sort({ createdAt: -1 });
+    const todos = await Todos.find({ userId: _id }).sort({ createdAt: -1 });
     res.status(200).json({ todos });
   } catch (error) {
     console.log(error);

@@ -77,7 +77,7 @@ const Todo = ({ _id, title, description, date, isCompleted }) => {
         </div>
       </div>
       <button
-        className="btn bg-white text-black rounded-sm"
+        className="btn btn-error text-black rounded-sm"
         onClick={() => handleDelete(_id)}
       >
         Delete

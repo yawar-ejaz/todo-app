@@ -2,7 +2,8 @@ const Users = require("../models/users");
 const createToken = require("../utils/createToken");
 
 const editUser = async (req, res, next) => {
-  const { name, _id } = req.body;
+  const { name } = req.body;
+  const { _id } = req.user;
 
   if (!_id || !name) {
     return res.status(400).json({

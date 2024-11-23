@@ -25,7 +25,6 @@ const Profile = () => {
         `/user`,
         {
           name: data.name,
-          _id: user._id,
         },
         {
           headers: {

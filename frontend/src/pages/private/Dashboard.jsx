@@ -20,7 +20,6 @@ function Dashboard() {
   const closeModal = () => setIsModalOpen(false);
 
   const createTodo = async (data) => {
-    data = { ...data, userId: user._id };
     try {
       const result = await axios.post("/todos", data, {
         headers: {
@@ -38,7 +37,7 @@ function Dashboard() {
 
   const fetchTodos = async () => {
     try {
-      const result = await axios.get(`/todos/${user._id}`, {
+      const result = await axios.get(`/todos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
