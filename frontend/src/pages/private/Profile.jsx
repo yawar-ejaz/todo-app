@@ -14,15 +14,16 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   const { handleSubmit, register, reset } = useForm();
   const user = useSelector((state) => state.user);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const { profilePic, name, email, dateJoined } = user;
 
-  const editProfile = async (data) => {
+  const editName = async (data) => {
     reset();
-    setIsModalOpen(false);
+    setIsNameModalOpen(false);
     try {
       const result = await axios.patch(
-        `/user`,
+        `/user/name`,
         {
           name: data.name,
         },
@@ -35,6 +36,29 @@ const Profile = () => {
       localStorage.setItem("token", result?.data?.token);
       const updatedUser = jwtDecode(localStorage.getItem("token"));
       dispatch(setUser(updatedUser));
+    } catch (error) {
+      alert(error?.response?.data?.message);
+    }
+  };
+
+  const changePassword = async (data) => {
+    reset();
+    setIsPasswordModalOpen(false);
+    const { password, newPassword } = data;
+    try {
+      const result = await axios.patch(
+        "/user/password",
+        {
+          password,
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert(result?.data?.message);
     } catch (error) {
       alert(error?.response?.data?.message);
     }
@@ -76,9 +100,15 @@ const Profile = () => {
         <div className="mt-8 flex justify-center space-x-4">
           <button
             className="btn btn-sm btn-success rounded-md"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsNameModalOpen(true)}
           >
-            Edit
+            Edit name
+          </button>
+          <button
+            className="btn btn-sm btn-success rounded-md"
+            onClick={() => setIsPasswordModalOpen(true)}
+          >
+            Change password
           </button>
           <button
             className="btn btn-sm btn-error rounded-md"
@@ -89,12 +119,12 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
+      {/* Name Modal */}
+      {isNameModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-base-200 p-6 rounded-lg shadow-lg w-full max-w-sm">
             <h3 className="text-lg font-bold mb-4">Edit Name</h3>
-            <form onSubmit={handleSubmit(editProfile)}>
+            <form onSubmit={handleSubmit(editName)}>
               <input
                 type="text"
                 className="input input-bordered w-full mb-4 rounded-md"
@@ -108,7 +138,7 @@ const Profile = () => {
                   type="button"
                   onClick={() => {
                     reset();
-                    setIsModalOpen(false);
+                    setIsNameModalOpen(false);
                   }}
                 >
                   Cancel
@@ -118,6 +148,49 @@ const Profile = () => {
                   type="submit"
                 >
                   Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Passsword Modal */}
+      {isPasswordModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-base-200 p-6 rounded-lg shadow-lg w-full max-w-sm">
+            <h3 className="text-lg font-bold mb-4">Change Password</h3>
+            <form onSubmit={handleSubmit(changePassword)}>
+              <input
+                type="password"
+                className="input input-bordered w-full mb-4 rounded-md"
+                placeholder="Enter your current password"
+                required
+                {...register("password")}
+              />
+              <input
+                type="password"
+                className="input input-bordered w-full mb-4 rounded-md"
+                placeholder="Enter your new password"
+                required
+                {...register("newPassword")}
+              />
+              <div className="flex justify-end space-x-2">
+                <button
+                  className="btn btn-sm btn-error rounded-md"
+                  type="button"
+                  onClick={() => {
+                    reset();
+                    setIsPasswordModalOpen(false);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-sm btn-success rounded-md"
+                  type="submit"
+                >
+                  Change
                 </button>
               </div>
             </form>

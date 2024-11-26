@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 const auth = async (req, res, next) => {
   const { authorization } = req.headers;
-
   if (!authorization) {
     return res.status(401).json({
       message: "Authorization token required.",
@@ -18,7 +17,7 @@ const auth = async (req, res, next) => {
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(400).json({
-        message: "Unauthorised user.",
+        message: "Invalid token.",
       });
     }
 

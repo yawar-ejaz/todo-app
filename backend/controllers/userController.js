@@ -1,7 +1,8 @@
 const Users = require("../models/users");
 const createToken = require("../utils/createToken");
+const { encrypt, isMatching } = require("../utils/hashing");
 
-const editUser = async (req, res, next) => {
+const editUserName = async (req, res, next) => {
   const { name } = req.body;
   const { _id } = req.user;
 
@@ -41,4 +42,34 @@ const editUser = async (req, res, next) => {
   }
 };
 
-module.exports = { editUser };
+const changePassword = async (req, res, next) => {
+  const { password, newPassword } = req.body;
+  const { _id } = req.user;
+  try {
+    const user = await Users.findById(_id);
+    if (!user) {
+      return res.status(400).json({
+        message: "No such user exists.",
+      });
+    }
+
+    if (!(await isMatching(password, user.password))) {
+      return res.status(401).json({
+        message: "Incorrect password.",
+      });
+    }
+
+    user.password = await encrypt(newPassword);
+    await user.save();
+    res.status(200).json({
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Failed to change password!",
+    });
+  }
+};
+
+module.exports = { editUserName, changePassword };
