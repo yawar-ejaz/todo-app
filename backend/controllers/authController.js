@@ -34,7 +34,6 @@ const createUser = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Failed to add user to the database!",
     });
@@ -72,7 +71,6 @@ const login = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Failed fetch user from the database!",
     });

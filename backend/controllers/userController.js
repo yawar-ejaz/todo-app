@@ -35,7 +35,6 @@ const editUserName = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Failed to update user details!",
     });
@@ -65,7 +64,6 @@ const changePassword = async (req, res, next) => {
       message: "Password changed successfully",
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Failed to change password!",
     });

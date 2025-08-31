@@ -28,7 +28,6 @@ const addTodo = async (req, res, next) => {
     // const todos = await Todos.find({ userId });
     res.status(201).json({ todo });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Failed to add todo.",
     });
@@ -49,7 +48,6 @@ const fetchTodos = async (req, res, next) => {
     const todos = await Todos.find({ userId: _id }).sort({ createdAt: -1 });
     res.status(200).json({ todos });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Failed fetch todos",
     });
@@ -69,7 +67,6 @@ const toggleTodo = async (req, res, next) => {
     await todo.save();
     res.status(200).json({ message: "Todo updated successfully" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Error updating todo.",
     });
@@ -88,7 +85,6 @@ const deleteTodo = async (req, res, next) => {
     await Todos.deleteOne({ _id });
     res.status(200).json({ message: "Todo deleted successfully" });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Error deleting todo.",
     });
