@@ -16,7 +16,6 @@ const Todo = ({ _id, title, description, date, isCompleted }) => {
       dispatch(deleteTodo(_id));
     } catch (error) {
       alert(error?.response?.data?.message);
-      console.log(error);
     }
   };
 
@@ -34,7 +33,6 @@ const Todo = ({ _id, title, description, date, isCompleted }) => {
       dispatch(toggleTodo(_id));
     } catch (error) {
       alert(error?.response?.data?.message);
-      console.log(error);
     }
   };
   return (

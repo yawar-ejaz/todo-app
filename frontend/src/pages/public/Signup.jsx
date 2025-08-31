@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../features/userSlice";
 
 
 import axios from "axios";
 
 const Signup = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { handleSubmit, register, reset } = useForm();
@@ -22,7 +20,6 @@ const Signup = () => {
       const user = jwtDecode(localStorage.getItem("token"));
       dispatch(setUser(user));
     } catch (error) {
-      console.log(error);
       alert(error.response.data.message);
       reset();
     }

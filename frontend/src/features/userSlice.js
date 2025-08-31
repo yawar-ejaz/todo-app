@@ -5,7 +5,6 @@ const decodeToken = (token) => {
   try {
     return jwtDecode(token);
   } catch (error) {
-    console.log("Invalid token");
     localStorage.removeItem("token");
     return null;
   }

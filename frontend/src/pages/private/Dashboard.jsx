@@ -29,7 +29,6 @@ function Dashboard() {
       dispatch(addTodo(result?.data?.todo));
     } catch (error) {
       alert(error?.response?.data?.message);
-      console.log(error);
     }
     reset();
     closeModal();
@@ -45,7 +44,6 @@ function Dashboard() {
       dispatch(setTodos(result?.data?.todos));
     } catch (error) {
       alert(error?.response?.data?.message);
-      console.log(error);
     }
   };
 

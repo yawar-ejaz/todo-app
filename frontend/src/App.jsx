@@ -3,17 +3,11 @@ import { Root, Login, Signup, NotFound } from "./pages/public";
 import { Dashboard, Profile } from "./pages/private";
 import { PublicRoute, PrivateRoute } from "./utils";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "./features/userSlice";
+import { useSelector } from "react-redux";
 axios.defaults.baseURL = import.meta.env.VITE_SERVER_ADDRESS;
 
 function App() {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-//   const token = localStorage.getItem("token");
-//   if (token) {
-//     dispatch(setUser(jwtDecode(token)));
-//   }
   return (
     <Router>
       <Routes>
